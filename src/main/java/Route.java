@@ -1,4 +1,8 @@
-import java.util.*;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
+import java.util.Arrays;
+import java.util.Stack;
 
 public class Route {
     private final Reef reef = new Reef();
@@ -8,7 +12,15 @@ public class Route {
     private final Waypoint startMiddle = new Waypoint(500);
     private final Waypoint startBottom = new Waypoint(600);
     private final Stack<Waypoint> waypoints = new Stack<>();
+    private final NetworkTableEntry entry;
     private Branch lastBranch;
+
+    public Route() {
+        entry = NetworkTableInstance
+                .getDefault()
+                .getTable("dynareef")
+                .getEntry("path");
+    }
 
     public Branch[] nextValidBranches() {
         if (waypoints.isEmpty()) {
@@ -71,6 +83,7 @@ public class Route {
 
     private void publishPath() {
         var pathIds = getPathIds();
+        entry.setIntegerArray(pathIds);
         for (var id : pathIds) {
             System.out.print(id + " ");
         }

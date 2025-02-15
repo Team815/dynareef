@@ -1,23 +1,41 @@
+import edu.wpi.first.cscore.CameraServerJNI;
+import edu.wpi.first.cscore.OpenCvLoader;
+import edu.wpi.first.math.jni.EigenJNI;
+import edu.wpi.first.networktables.NetworkTablesJNI;
+import edu.wpi.first.util.CombinedRuntimeLoader;
+import edu.wpi.first.util.WPIUtilJNI;
+import org.opencv.core.Core;
+
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
+/**
+ * Program
+ */
+public class Program {
     final int hSpacing = 88;
     final int vSpacing = 46;
     final Route route = new Route();
     final BranchButton[] buttons;
     final JButton undoButton;
 
-    public static void main(String[] args) {
-        new Main();
+    public static void main(String[] args) throws IOException {
+        NetworkTablesJNI.Helper.setExtractOnStaticLoad(false);
+        WPIUtilJNI.Helper.setExtractOnStaticLoad(false);
+        EigenJNI.Helper.setExtractOnStaticLoad(false);
+        CameraServerJNI.Helper.setExtractOnStaticLoad(false);
+        OpenCvLoader.Helper.setExtractOnStaticLoad(false);
+
+        CombinedRuntimeLoader.loadLibraries(Program.class, "wpiutiljni", "wpimathjni", "ntcorejni", Core.NATIVE_LIBRARY_NAME, "cscorejni");
+
+        new Program();
     }
 
-    public Main() {
+    public Program() {
         var reef = route.getReef();
         var branches = reef.getAllBranches();
         var frame = new JFrame("Dynareef");
