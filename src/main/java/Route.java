@@ -16,8 +16,11 @@ public class Route {
     private Branch lastBranch;
 
     public Route() {
-        entry = NetworkTableInstance
-                .getDefault()
+        var inst = NetworkTableInstance.getDefault();
+        inst.startClient4("Dynareef");
+        inst.setServerTeam(815);
+        inst.startDSClient();
+        entry = inst
                 .getTable("dynareef")
                 .getEntry("path");
     }
